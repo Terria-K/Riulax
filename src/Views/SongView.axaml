@@ -1,0 +1,26 @@
+<UserControl x:Class="AvaloniaTest.Views.SongView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:AvaloniaTest.ViewModels"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             x:DataType="vm:SongViewModel"
+             x:CompileBindings="True"
+             mc:Ignorable="d">
+    
+
+    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Spacing="4">
+        <Border Width="32" Height="32" CornerRadius="10" ClipToBounds="True">
+            <Panel Background="#7FFF22DD">
+                <Image asyncImageLoader:ImageLoader.Source="{Binding ArtworkURL}" Width="32" Stretch="Uniform"/>
+
+                <Panel Height="32" IsVisible="{Binding ArtworkURL, Converter={x:Static StringConverters.IsNullOrEmpty}}">
+                    <PathIcon Height="20" Width="20" Data="{StaticResource music_regular}"/>
+                </Panel>
+            </Panel>
+        </Border>
+        <TextBlock Grid.Column="1" Text="{Binding Title}" HorizontalAlignment="Left" VerticalAlignment="Center"/> 
+    </StackPanel>
+</UserControl>
