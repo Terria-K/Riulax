@@ -5,10 +5,10 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using AvaloniaTest.Models;
+using Riulax.Models;
 using LibVLCSharp.Shared;
 using ReactiveUI;
-namespace AvaloniaTest.ViewModels;
+namespace Riulax.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {

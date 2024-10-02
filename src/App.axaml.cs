@@ -3,11 +3,11 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using AvaloniaTest.ViewModels;
-using AvaloniaTest.Views;
+using Riulax.ViewModels;
+using Riulax.Views;
 using HotAvalonia;
 
-namespace AvaloniaTest;
+namespace Riulax;
 
 public partial class App : Application
 {

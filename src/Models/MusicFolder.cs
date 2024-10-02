@@ -1,4 +1,4 @@
-namespace AvaloniaTest.Models;
+namespace Riulax.Models;
 
 public class MusicFolder(string FolderPath, bool HasIndexed) 
 {

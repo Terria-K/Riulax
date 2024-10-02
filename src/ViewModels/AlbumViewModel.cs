@@ -1,6 +1,6 @@
-using AvaloniaTest.Models;
+using Riulax.Models;
 
-namespace AvaloniaTest.ViewModels;
+namespace Riulax.ViewModels;
 
 public partial class AlbumViewModel : ViewModelBase
 {

@@ -1,14 +1,14 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
-        xmlns:vm="using:AvaloniaTest.ViewModels"
-        xmlns:views="using:AvaloniaTest.Views"
+        xmlns:vm="using:Riulax.ViewModels"
+        xmlns:views="using:Riulax.Views"
 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="550"
         WindowStartupLocation="CenterOwner"
-        x:Class="AvaloniaTest.Views.MusicImporterWindow"
+        x:Class="Riulax.Views.MusicImporterWindow"
         x:DataType="vm:MusicImporterViewModel"
         Width="1000" Height="550"
         Title="Music Library">

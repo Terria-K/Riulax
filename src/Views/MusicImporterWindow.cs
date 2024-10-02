@@ -3,10 +3,10 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
-using AvaloniaTest.ViewModels;
+using Riulax.ViewModels;
 using Microsoft.Data.Sqlite;
 
-namespace AvaloniaTest.Views;
+namespace Riulax.Views;
 
 public partial class MusicImporterWindow : ReactiveWindow<MusicImporterViewModel>
 {

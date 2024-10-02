@@ -1,18 +1,18 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:AvaloniaTest.ViewModels"
+        xmlns:vm="using:Riulax.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="https://github.com/projektanker/icons.avalonia"
-        xmlns:views="using:AvaloniaTest.Views"
+        xmlns:views="using:Riulax.Views"
         xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         WindowStartupLocation="CenterScreen"
-        x:Class="AvaloniaTest.Views.MainWindow"
+        x:Class="Riulax.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Background="#272727"
-        Title="Music Player">
+        Title="Riulax">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>

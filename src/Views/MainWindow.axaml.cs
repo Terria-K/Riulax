@@ -4,11 +4,11 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
-using AvaloniaTest.ViewModels;
+using Riulax.ViewModels;
 using Microsoft.Data.Sqlite;
 using ReactiveUI;
 
-namespace AvaloniaTest.Views;
+namespace Riulax.Views;
 
 public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 {

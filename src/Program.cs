@@ -6,7 +6,7 @@ using Projektanker.Icons.Avalonia.FontAwesome;
 using Projektanker.Icons.Avalonia.MaterialDesign;
 using System;
 
-namespace AvaloniaTest;
+namespace Riulax;
 
 sealed class Program
 {

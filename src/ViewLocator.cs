@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using AvaloniaTest.ViewModels;
+using Riulax.ViewModels;
 
-namespace AvaloniaTest;
+namespace Riulax;
 
 public class ViewLocator : IDataTemplate
 {

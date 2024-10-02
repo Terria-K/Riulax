@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using AvaloniaTest.Models;
+using Riulax.Models;
 
-namespace AvaloniaTest.ViewModels;
+namespace Riulax.ViewModels;
 
 public partial class MusicFolderViewModel : ViewModelBase 
 {

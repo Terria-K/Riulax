@@ -1,5 +1,5 @@
-using AvaloniaTest.Models;
-namespace AvaloniaTest.ViewModels;
+using Riulax.Models;
+namespace Riulax.ViewModels;
 
 public partial class SongViewModel : ViewModelBase 
 {

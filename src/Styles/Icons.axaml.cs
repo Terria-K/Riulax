@@ -1,6 +1,6 @@
 using Avalonia.Styling;
 
-namespace AvaloniaTest;
+namespace Riulax;
 
 public partial class Icons : Styles
 {

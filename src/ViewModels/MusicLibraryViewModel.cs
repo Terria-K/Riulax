@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
-using AvaloniaTest.Models;
+using Riulax.Models;
 using ReactiveUI;
 
-namespace AvaloniaTest.ViewModels;
+namespace Riulax.ViewModels;
 
 public partial class MusicLibraryViewModel : ViewModelBase
 {

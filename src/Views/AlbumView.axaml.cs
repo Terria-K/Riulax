@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace AvaloniaTest.Views;
+namespace Riulax.Views;
 
 public partial class AlbumView : UserControl
 {

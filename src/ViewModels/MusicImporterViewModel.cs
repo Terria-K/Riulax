@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
 
-namespace AvaloniaTest.ViewModels;
+namespace Riulax.ViewModels;
 
 public partial class MusicImporterViewModel : ViewModelBase 
 {
