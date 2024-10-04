@@ -10,3 +10,8 @@ An elegant music player made with Avalonia.
 ```
 libvlc
 ```
+
+## Roadmap
+[ ] Playlist
+[ ] Albums
+[ ] Duration

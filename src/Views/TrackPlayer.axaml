@@ -135,11 +135,12 @@
             </Slider.Styles>
         </Slider>
 
-        <Panel Height="50">
-            <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button i:Attached.Icon="mdi-page-first" Background="Transparent" FontSize="24"/>
-                <Button Command="{Binding PauseOrPlaySong}" i:Attached.Icon="mdi-pause" Background="Transparent" FontSize="24"/>
-                <Button i:Attached.Icon="mdi-page-last" Background="Transparent" FontSize="24"/>
+        <Panel VerticalAlignment="Center" Height="50" Margin="0 5 0 0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Command="{Binding ChangeState}" i:Attached.Icon="{Binding StateIcon}" Background="Transparent" FontSize="24"/>
+                <Button Command="{Binding PrevSong}" i:Attached.Icon="mdi-page-first" Background="Transparent" FontSize="24"/>
+                <Button Command="{Binding PauseOrPlaySong}" i:Attached.Icon="{Binding PauseIcon}" Background="Transparent" FontSize="24"/>
+                <Button Command="{Binding NextSong}" i:Attached.Icon="mdi-page-last" Background="Transparent" FontSize="24"/>
                 <ToggleButton IsChecked="{Binding IsLooping}" i:Attached.Icon="mdi-cached" Background="Transparent" FontSize="24"/>
             </StackPanel>
         </Panel>

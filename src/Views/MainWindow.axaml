@@ -57,6 +57,7 @@
         <Border CornerRadius="20 00 0 0" ClipToBounds="True">
             <Panel DockPanel.Dock="Right" Background="#111111">
                 <ListBox 
+                    x:Name="SongList"
                     SelectionChanged="PlaySong"
                     SelectionMode="Single" ItemsSource="{Binding Songs}" 
                     SelectedItem="{Binding SelectedSong}"

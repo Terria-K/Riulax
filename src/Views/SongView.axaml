@@ -12,15 +12,18 @@
     
 
     <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Spacing="4">
-        <Border Width="32" Height="32" CornerRadius="10" ClipToBounds="True">
+        <Border Width="48" Height="48" CornerRadius="10" ClipToBounds="True">
             <Panel Background="#7FFF22DD">
-                <Image asyncImageLoader:ImageLoader.Source="{Binding ArtworkURL}" Width="32" Stretch="Uniform"/>
+                <Image asyncImageLoader:ImageLoader.Source="{Binding ArtworkURL}" Width="48" Stretch="Uniform"/>
 
-                <Panel Height="32" IsVisible="{Binding ArtworkURL, Converter={x:Static StringConverters.IsNullOrEmpty}}">
+                <Panel Height="48" IsVisible="{Binding ArtworkURL, Converter={x:Static StringConverters.IsNullOrEmpty}}">
                     <PathIcon Height="20" Width="20" Data="{StaticResource music_regular}"/>
                 </Panel>
             </Panel>
         </Border>
-        <TextBlock Grid.Column="1" Text="{Binding Title}" HorizontalAlignment="Left" VerticalAlignment="Center"/> 
+        <StackPanel>
+            <TextBlock FontSize="20" Grid.Column="1" Text="{Binding Title}" HorizontalAlignment="Left" VerticalAlignment="Center"/> 
+            <TextBlock TextElement.Foreground="LightGray" FontSize="16" Grid.Column="1" Text="{Binding Artist}" HorizontalAlignment="Left" VerticalAlignment="Center"/> 
+        </StackPanel>
     </StackPanel>
 </UserControl>

@@ -13,13 +13,14 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     public MainWindow()
     {
         InitializeComponent();
-        this.WhenActivated(action => {
+        this.WhenActivated(async action => {
 
             action(ViewModel!.ShowDialog.RegisterHandler(DoShowDialogAsync));
+            await ViewModel!.Start();
         });
     }
 
-    public void PlaySong(object sender, SelectionChangedEventArgs args) 
+    public void PlaySong(object? sender, SelectionChangedEventArgs args) 
     {
         var model = (MainWindowViewModel)ViewModel!;
         model.PlaySong();

@@ -7,18 +7,59 @@ namespace Riulax.ViewModels;
 
 public class TrackPlayerViewModel : ViewModelBase 
 {
+    public enum PlayerShufflingState { Once, NextOnly, Shuffle }
     public LibVLC LibVLC { get; }
     public SongViewModel? SelectedSong 
     {
         get => selectedSong;
         set => this.RaiseAndSetIfChanged(ref selectedSong, value);
     }
+
+    public string PauseIcon 
+    {
+        get => icon;
+        set => this.RaiseAndSetIfChanged(ref icon, value);
+    }
+
+    public string StateIcon 
+    {
+        get => stateIcon;
+        set => this.RaiseAndSetIfChanged(ref stateIcon, value);
+    }
+
+    public PlayerShufflingState PlayerState 
+    {
+        get => playerState;
+        set 
+        {
+            this.RaiseAndSetIfChanged(ref playerState, value);
+            switch (PlayerState) 
+            {
+            case PlayerShufflingState.Once:
+                StateIcon = "mdi-numeric-1-circle-outline";
+                break;
+            case PlayerShufflingState.NextOnly:
+                StateIcon = "mdi-shuffle-disabled";
+                break;
+            default:
+                StateIcon = "mdi-shuffle";
+                break;
+            }
+        } 
+    }
+
+    public event Action? NextEvent;
+    public event Action? PrevEvent;
+    public event Action? RandomEvent;
     private SongViewModel? selectedSong;
     private MediaPlayer? player;
     private float time;
     private bool isSeeking;
     private bool isLooping;
     private bool playAfterStop;
+    private string icon = "mdi-pause";
+    private string stateIcon = "mdi-numeric-1-circle-outline";
+    private PlayerShufflingState playerState;
 
     public TrackPlayerViewModel(LibVLC libVLC)
     {
@@ -76,6 +117,10 @@ public class TrackPlayerViewModel : ViewModelBase
                 return;
             }
 
+            if (PauseIcon == "mdi-play") 
+            {
+                return;
+            }
             if (isSeeking) 
             {
                 player.Pause();
@@ -99,8 +144,10 @@ public class TrackPlayerViewModel : ViewModelBase
         if (player.State == VLCState.Playing) 
         {
             player.Pause();
+            PauseIcon = "mdi-play";
             return;
         }
+        PauseIcon = "mdi-pause";
         player.Play();
     }
 
@@ -124,6 +171,32 @@ public class TrackPlayerViewModel : ViewModelBase
 
         using Media media = new Media(LibVLC, selectedSong.Path);
         player.Play(media);
+        PauseIcon = "mdi-pause";
+    }
+
+    public void NextSong() 
+    {
+        NextEvent?.Invoke();
+    }
+
+    public void PrevSong() 
+    {
+        PrevEvent?.Invoke();
+    }
+
+    public void RandomSong() 
+    {
+        RandomEvent?.Invoke();
+    }
+
+    public void ChangeState() 
+    {
+        PlayerState = PlayerState switch {
+            PlayerShufflingState.Once => PlayerShufflingState.NextOnly,
+            PlayerShufflingState.NextOnly => PlayerShufflingState.Shuffle,
+            PlayerShufflingState.Shuffle => PlayerShufflingState.Once,
+            _ => PlayerShufflingState.Once
+        };
     }
 
     private void EndReached(object? sender, EventArgs e) 
@@ -137,6 +210,16 @@ public class TrackPlayerViewModel : ViewModelBase
         {
             playAfterStop = true;
             player.Play();
+            return;
+        }
+        switch (PlayerState) 
+        {
+        case PlayerShufflingState.NextOnly:
+            NextSong();
+            break;
+        case PlayerShufflingState.Shuffle:
+            RandomSong();
+            break;
         }
     }
 
