@@ -168,7 +168,6 @@ public partial class MainWindowViewModel : ViewModelBase
         if (predefinedRandom.TryDequeue(out int res)) 
         {
             SelectedSong = Songs[res]; 
-            Console.WriteLine(res);
         }
         else 
         {
