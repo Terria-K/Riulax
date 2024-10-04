@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
 using Riulax.ViewModels;
 using Microsoft.Data.Sqlite;
@@ -21,28 +19,10 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
         });
     }
 
-    public void PauseOrPlaySong(object sender, RoutedEventArgs args) 
+    public void PlaySong(object sender, SelectionChangedEventArgs args) 
     {
-        var viewModel = (MainWindowViewModel)ViewModel!;
-        viewModel.PauseOrPlaySong();
-    }
-
-    private void PlaySong(object sender, SelectionChangedEventArgs args) 
-    {
-        var viewModel = (MainWindowViewModel)ViewModel!;
-        viewModel.PlaySong();
-    }
-
-    public void Thumb_OnDragStarted(object sender, VectorEventArgs args) 
-    {
-        var viewModel = (MainWindowViewModel)ViewModel!;
-        viewModel.IsSeeking = true;
-    }
-
-    public void Thumb_OnDragCompleted(object sender, VectorEventArgs args) 
-    {
-        var viewModel = (MainWindowViewModel)ViewModel!;
-        viewModel.IsSeeking = false;
+        var model = (MainWindowViewModel)ViewModel!;
+        model.PlaySong();
     }
 
     private async Task DoShowDialogAsync(InteractionContext<MusicImporterViewModel, ICollection<MusicFolderViewModel>?> interaction) 
