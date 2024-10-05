@@ -16,21 +16,9 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args) 
     {
-        using (var connection = new SqliteConnection("Data Source=music.db")) 
-        {
-            connection.Open();
-
-            var command = connection.CreateCommand();
-            command.CommandText = 
-            """
-            CREATE TABLE if not exists music (
-                id      INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
-                path    TEXT NOT NULL
-            );
-            """;
-
-            command.ExecuteNonQuery();
-        }
+        Database database = new Database("music.db");
+        database.InitAllTable();
+        AppState.Database = database;
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
     }
@@ -46,4 +34,9 @@ sealed class Program
             .LogToTrace()
             .UseReactiveUI();
     }
+}
+
+public static class AppState 
+{
+    public static Database Database { get; set; } = null!;
 }

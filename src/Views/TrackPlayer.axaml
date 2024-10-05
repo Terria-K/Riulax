@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:Riulax.ViewModels"
+             xmlns:core="using:Riulax"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
              x:DataType="vm:TrackPlayerViewModel"
              mc:Ignorable="d">
@@ -137,11 +138,21 @@
 
         <Panel VerticalAlignment="Center" Height="50" Margin="0 5 0 0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <Binding Converter="{x:Static core:RiulaxConverter.IntToTimeString}" Path="RawTime"/>
+                    </TextBlock.Text>
+                </TextBlock>
                 <Button Command="{Binding ChangeState}" i:Attached.Icon="{Binding StateIcon}" Background="Transparent" FontSize="24"/>
                 <Button Command="{Binding PrevSong}" i:Attached.Icon="mdi-page-first" Background="Transparent" FontSize="24"/>
                 <Button Command="{Binding PauseOrPlaySong}" i:Attached.Icon="{Binding PauseIcon}" Background="Transparent" FontSize="24"/>
                 <Button Command="{Binding NextSong}" i:Attached.Icon="mdi-page-last" Background="Transparent" FontSize="24"/>
                 <ToggleButton IsChecked="{Binding IsLooping}" i:Attached.Icon="mdi-cached" Background="Transparent" FontSize="24"/>
+                <TextBlock VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <Binding Converter="{x:Static core:RiulaxConverter.IntToTimeString}" Path="Length"/>
+                    </TextBlock.Text>
+                </TextBlock>
             </StackPanel>
         </Panel>
     </StackPanel>

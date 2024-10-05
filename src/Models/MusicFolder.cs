@@ -1,7 +1,10 @@
+using System;
+
 namespace Riulax.Models;
 
-public class MusicFolder(string FolderPath, bool HasIndexed) 
+public class MusicFolder(Ulid id, string folderPath, bool hasIndexed) 
 {
-    public string FolderPath { get; init; } = FolderPath;
-    public bool HasIndexed { get; set; } = HasIndexed;
+    public Ulid ID { get; init; } = id;
+    public string FolderPath { get; init; } = folderPath;
+    public bool HasIndexed { get; set; } = hasIndexed;
 }

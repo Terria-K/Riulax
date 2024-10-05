@@ -2,9 +2,29 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using ReactiveUI;
 using Riulax.ViewModels;
+using Riulax.Views;
 
 namespace Riulax;
+
+public class AppViewLocator : ReactiveUI.IViewLocator
+{
+    public IViewFor? ResolveView<T>(T? viewModel, string? contract = null) 
+    {
+        if (viewModel is MainWindowViewModel model) 
+        {
+            return model.ViewRoute switch 
+            {
+                MainWindowViewModel.Route.Home => new SongListView() { DataContext = model },
+                MainWindowViewModel.Route.Songs => new SongListView() { DataContext = model },
+                MainWindowViewModel.Route.Playlist => new SongListView() { DataContext = model },
+                _ => null
+            };
+        }
+        return null;
+    }
+}
 
 public class ViewLocator : IDataTemplate
 {

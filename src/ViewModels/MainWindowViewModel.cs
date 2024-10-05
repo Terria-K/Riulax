@@ -7,21 +7,23 @@ using System.Windows.Input;
 using Riulax.Models;
 using LibVLCSharp.Shared;
 using ReactiveUI;
-using Microsoft.Data.Sqlite;
-using System.Threading;
+using DynamicData;
+
 namespace Riulax.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : ViewModelBase, IScreen, IRoutableViewModel
 {
+    public enum Route { Home, Songs, Playlist }
+    public Route ViewRoute = Route.Songs;
+    public RoutingState Router { get; } = new RoutingState();
     public LibVLC LibVLC { get; }
     public SongViewModel? SelectedSong 
     {
         get => selectedSong;
         set 
         {
-            this.RaiseAndSetIfChanged(ref selectedSong, value);
             trackPlayerViewModel.SelectedSong = value!;
-
+            this.RaiseAndSetIfChanged(ref selectedSong, value);
         }
     }
     public ICommand MyMusicCommand { get; }
@@ -33,6 +35,10 @@ public partial class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref trackPlayerViewModel, value);
     }
 
+    public string? UrlPathSegment { get; } = Ulid.NewUlid().ToString();
+
+    public IScreen HostScreen { get; }
+
     private TrackPlayerViewModel trackPlayerViewModel;
     private SongViewModel? selectedSong;
     private Random random = new Random();
@@ -43,6 +49,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel() 
     {
+        HostScreen = this;
         LibVLC = new LibVLC("--no-video");
         trackPlayerViewModel = new TrackPlayerViewModel(LibVLC);
         trackPlayerViewModel.NextEvent += Next;
@@ -53,41 +60,45 @@ public partial class MainWindowViewModel : ViewModelBase
         MyMusicCommand = ReactiveCommand.Create(() => 
         {
             var importer = new MusicImporterViewModel();
-            ShowDialog.Handle(importer).Subscribe(x => {
+            ShowDialog.Handle(importer).Subscribe(async x => {
                 if (x == null) 
                 {
                     return;
                 }
                 Songs.Clear();
-                AddLibrary(x);
+                await IndexLibrary(x);
+                await Start();
             });
         });
     }
 
     public async Task Start() 
     {
-        List<MusicFolderViewModel> folders = new List<MusicFolderViewModel>();
-        using (var connection = new SqliteConnection("Data Source=music.db")) 
-        {
-            await connection.OpenAsync();
-
-            var command = connection.CreateCommand();
-            command.CommandText = """
-            SELECT path FROM music
-            """;
-            using var reader = await command.ExecuteReaderAsync();
-            while (reader.Read()) 
-            {
-                folders.Add(new MusicFolderViewModel(new MusicFolder(reader.GetString(0), false)));
-            }
-        }
-        AddLibrary(folders);
+        List<SongViewModel> songs = await AppState.Database.GetAllSong();
+        Songs.AddRange(songs);
     }
 
-    private void AddLibrary(ICollection<MusicFolderViewModel> library) 
+    public void ChangeView(object msg) 
     {
+        if (msg is "Playlist") 
+        {
+            ViewRoute = Route.Playlist;
+            Router.Navigate.Execute(this);
+            return;
+        }
+        if (msg is "Songs") 
+        {
+            ViewRoute = Route.Songs;
+            Router.Navigate.Execute(this);
+        }
+    }
+
+    private async Task IndexLibrary(ICollection<MusicFolderViewModel> library) 
+    {
+        var connection = await AppState.Database.StartAddSongConnection();
         foreach (var folder in library)
         {
+            if (folder.HasIndexed) { continue; }
             var files = Directory.GetFiles(folder.Path);
             foreach (var file in files) 
             {
@@ -97,14 +108,21 @@ public partial class MainWindowViewModel : ViewModelBase
                 var title = media.Meta(MetadataType.Title) ?? "";
                 var artist = media.Meta(MetadataType.Artist) ?? "";
                 var url = media.Meta(MetadataType.ArtworkURL) ?? "";
-                Songs.Add(new SongViewModel(new Song(title, artist, url, file)));
+                var date = media.Meta(MetadataType.Date) ?? "";
+                SongViewModel model = new SongViewModel(new Song(Ulid.NewUlid(), file, title, artist, date, url, Ulid.NewUlid()));
                 media.ParseStop();
+
+                await AppState.Database.AddSongPrepare(connection, folder, model);
             }
+
+            await AppState.Database.IndexFolder(folder);
         }
+        await AppState.Database.EndAddSongConnection(connection);
     }
 
-    public void PlaySong() 
+    public void PlaySong(SongViewModel song) 
     {
+        SelectedSong = song;
         trackPlayerViewModel.PlaySong();
         if (randoming) 
         {

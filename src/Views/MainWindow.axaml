@@ -1,25 +1,26 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:rxui="http://reactiveui.net"
         xmlns:vm="using:Riulax.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="https://github.com/projektanker/icons.avalonia"
         xmlns:views="using:Riulax.Views"
+        xmlns:app="using:Riulax"
         xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         WindowStartupLocation="CenterScreen"
         x:Class="Riulax.Views.MainWindow"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="PreferSystemChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Background="#272727"
         Title="Riulax">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-
     <DockPanel>
-        <Panel Height="50" VerticalAlignment="Top" DockPanel.Dock="Top">
+        <Panel DockPanel.Dock="Top" x:Name="WindowTitle" Height="50" VerticalAlignment="Top" ZIndex="10">
             <StackPanel VerticalAlignment="Center" Margin="10 0 10 0" Spacing="4" Orientation="Horizontal">
                 <TextBox Width="300" BorderThickness="2" Watermark="Search for songs..."/>
                 <Button i:Attached.Icon="fa-solid fa-magnifying-glass" />
@@ -52,17 +53,48 @@
         <views:TrackPlayer DataContext="{Binding TrackPlayerViewModel}" DockPanel.Dock="Bottom"/>
 
 
-        <views:HomeView DockPanel.Dock="Left" />
+       <SplitView 
+            x:Name="Pane"
+            IsPaneOpen="False"
+            DisplayMode="CompactInline"
+            OpenPaneLength="200"> 
+            <SplitView.Pane>
+                <UserControl Background="#272727" x:Name="ControlPane">
+                    <StackPanel Margin="0 20 0 0" Spacing="2">
+                        <Button Command="{Binding ChangeView}" CommandParameter="Home" HorizontalAlignment="Stretch" Background="Transparent">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <i:Icon HorizontalAlignment="Center" Value="mdi-home" FontSize="24"/>
+                                <TextBlock VerticalAlignment="Center" IsVisible="{Binding #Pane.IsPaneOpen}" Text="Home" FontSize="20"/>
+                            </StackPanel>
+                        </Button>
 
-        <Border CornerRadius="20 00 0 0" ClipToBounds="True">
-            <Panel DockPanel.Dock="Right" Background="#111111">
-                <ListBox 
-                    x:Name="SongList"
-                    SelectionChanged="PlaySong"
-                    SelectionMode="Single" ItemsSource="{Binding Songs}" 
-                    SelectedItem="{Binding SelectedSong}"
-                    Background="Transparent" Margin="0 20" HorizontalAlignment="Stretch"/>
-            </Panel>
-        </Border>
+                        <Button Command="{Binding ChangeView}" CommandParameter="Songs" HorizontalAlignment="Stretch" Background="Transparent">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <i:Icon HorizontalAlignment="Center" Value="mdi-music" FontSize="24"/>
+                                <TextBlock VerticalAlignment="Center" IsVisible="{Binding #Pane.IsPaneOpen}" Text="Songs" FontSize="20"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Command="{Binding ChangeView}" CommandParameter="Playlist" HorizontalAlignment="Stretch" Background="Transparent">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <i:Icon HorizontalAlignment="Center" Value="mdi-playlist-music" FontSize="24"/>
+                                <TextBlock VerticalAlignment="Center" IsVisible="{Binding #Pane.IsPaneOpen}" Text="Playlist" FontSize="20"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </UserControl>
+            </SplitView.Pane>
+
+            <rxui:RoutedViewHost Router="{Binding Router}">
+                <rxui:RoutedViewHost.DefaultContent>
+                    <views:SongListView DataContext="{Binding $parent[Window].DataContext}"/>
+                </rxui:RoutedViewHost.DefaultContent>
+
+                <rxui:RoutedViewHost.ViewLocator>
+                    <app:AppViewLocator/>
+                </rxui:RoutedViewHost.ViewLocator>
+            </rxui:RoutedViewHost>
+
+        </SplitView>
     </DockPanel>
 </Window>

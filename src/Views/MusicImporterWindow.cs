@@ -1,10 +1,9 @@
-using System.Threading.Tasks;
+using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using Riulax.ViewModels;
-using Microsoft.Data.Sqlite;
 
 namespace Riulax.Views;
 
@@ -15,7 +14,7 @@ public partial class MusicImporterWindow : ReactiveWindow<MusicImporterViewModel
         InitializeComponent();
     }
 
-    private async void LocateFolder_Clicked(object sender, RoutedEventArgs args) 
+    private async void LocateFolder_Clicked(object sender, RoutedEventArgs args)
     {
         var topLevel = TopLevel.GetTopLevel(this);
 
@@ -25,39 +24,27 @@ public partial class MusicImporterWindow : ReactiveWindow<MusicImporterViewModel
             AllowMultiple = false
         });
 
-        if (folder.Count >= 1)
+        if (folder.Count < 1)
         {
-            var path = folder[0].TryGetLocalPath();
-            if (path is null)
-            {
-                return;
-            }
-            var model = ((MusicImporterViewModel)ViewModel!);
-
-            var newModel = new MusicFolderViewModel(new Models.MusicFolder(path, false));
-
-            if (model.Folders.Contains(newModel)) 
-            {
-                return;
-            }
-            newModel.Delete += model.Delete;
-            
-            model.Folders.Add(newModel);
-
-            using (var connection = new SqliteConnection("Data Source=music.db")) 
-            {
-                await connection.OpenAsync();
-
-                var command = connection.CreateCommand();
-                command.CommandText = 
-                $"""
-                INSERT INTO music (path)
-                VALUES ($path)
-                """;
-                command.Parameters.AddWithValue("$path", path);
-
-                await command.ExecuteNonQueryAsync();
-            }
+            return;
         }
+        var path = folder[0].TryGetLocalPath();
+        if (path is null)
+        {
+            return;
+        }
+        var model = ((MusicImporterViewModel)ViewModel!);
+
+        var newModel = new MusicFolderViewModel(new Models.MusicFolder(Ulid.NewUlid(), path, false));
+
+        if (await AppState.Database.CheckMusicFolder(newModel))
+        {
+            return;
+        }
+        newModel.Delete += model.Delete;
+
+        model.Folders.Add(newModel);
+
+        await AppState.Database.AddMusicFolder(newModel);
     }
 }

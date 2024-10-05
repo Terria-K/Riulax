@@ -10,6 +10,7 @@ public partial class MusicFolderViewModel : ViewModelBase
 
     public event Func<MusicFolderViewModel, Task>? Delete;
 
+    public Ulid ID => folder.ID;
     public bool HasIndexed => folder.HasIndexed;
     public string Path => folder.FolderPath;
 

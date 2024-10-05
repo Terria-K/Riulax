@@ -48,24 +48,6 @@ public class TrackPlayerViewModel : ViewModelBase
         } 
     }
 
-    public event Action? NextEvent;
-    public event Action? PrevEvent;
-    public event Action? RandomEvent;
-    private SongViewModel? selectedSong;
-    private MediaPlayer? player;
-    private float time;
-    private bool isSeeking;
-    private bool isLooping;
-    private bool playAfterStop;
-    private string icon = "mdi-pause";
-    private string stateIcon = "mdi-numeric-1-circle-outline";
-    private PlayerShufflingState playerState;
-
-    public TrackPlayerViewModel(LibVLC libVLC)
-    {
-        LibVLC = libVLC; 
-    }
-
     public bool IsLooping 
     {
         get => isLooping;
@@ -74,17 +56,13 @@ public class TrackPlayerViewModel : ViewModelBase
 
     public float Time 
     {
-        get => (player != null ? time / (float)player.Length : time) * 100;
+        get => (time / length) * 100;
         set 
         {
-            if (player == null) 
-            {
-                return;
-            }
-            int newValue = (int)((value / 100) * player.Length);
+            float newValue = (value / 100.0f) * length;
 
             this.RaiseAndSetIfChanged(ref time, newValue);
-            if (isSeeking) 
+            if (player != null && isSeeking) 
             {
                 player.SeekTo(TimeSpan.FromMilliseconds(time));
             }
@@ -96,15 +74,11 @@ public class TrackPlayerViewModel : ViewModelBase
         get => time;
         set 
         {
-            if (player == null) 
-            {
-                return;
-            }
             float val = value;
-            Time = (val / (float)player.Length) * 100;
+            Time = (val / length) * 100;
+            this.RaisePropertyChanged(nameof(RawTime));
         }
     }
-
 
     public bool IsSeeking 
     {
@@ -128,6 +102,30 @@ public class TrackPlayerViewModel : ViewModelBase
             }
             player.Play();
         }
+    }
+    public float Length 
+    {
+        get => length;
+        set => this.RaiseAndSetIfChanged(ref length, value);
+    }
+
+    public event Action? NextEvent;
+    public event Action? PrevEvent;
+    public event Action? RandomEvent;
+    private SongViewModel? selectedSong;
+    private MediaPlayer? player;
+    private float time;
+    private float length;
+    private bool isSeeking;
+    private bool isLooping;
+    private bool playAfterStop;
+    private string icon = "mdi-pause";
+    private string stateIcon = "mdi-numeric-1-circle-outline";
+    private PlayerShufflingState playerState;
+
+    public TrackPlayerViewModel(LibVLC libVLC)
+    {
+        LibVLC = libVLC; 
     }
     
     public void PauseOrPlaySong() 
@@ -167,7 +165,7 @@ public class TrackPlayerViewModel : ViewModelBase
         player.Stopped += (sender, e) => ThreadPool.QueueUserWorkItem(_ => Stopped(sender, e));
         player.TimeChanged += TimeChanged;
         player.EndReached += (sender, e) => ThreadPool.QueueUserWorkItem(_ => EndReached(sender, e));
-
+        player.LengthChanged += (sender, e) => ThreadPool.QueueUserWorkItem(_ => Length = player.Length);
 
         using Media media = new Media(LibVLC, selectedSong.Path);
         player.Play(media);
