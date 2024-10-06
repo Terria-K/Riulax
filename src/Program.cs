@@ -3,6 +3,7 @@ using Avalonia.ReactiveUI;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.FontAwesome;
 using Projektanker.Icons.Avalonia.MaterialDesign;
+using Riulax.ViewModels;
 using System;
 
 namespace Riulax;
@@ -38,4 +39,6 @@ sealed class Program
 public static class AppState 
 {
     public static Database Database { get; set; } = null!;
+    // For sys tray purposes
+    public static TrackPlayerViewModel TrackPlayer { get; set; } = null!;
 }

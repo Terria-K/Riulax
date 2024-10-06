@@ -15,4 +15,19 @@
         <StyleInclude Source="avares://Riulax/Styles/Icons.axaml"/>
         <dialogHostAvalonia:DialogHostStyles/>
     </Application.Styles>
+
+  <TrayIcon.Icons>
+    <TrayIcons>
+      <TrayIcon Icon="/Assets/avalonia-logo.ico" 
+                ToolTipText="Riulax">
+        <TrayIcon.Menu>
+          <NativeMenu>
+            <NativeMenuItem Header="Play/Pause" Click="Play"/>
+            <NativeMenuItem Header="Next" Click="Next"/>
+            <NativeMenuItem Header="Prev" Click="Prev"/>
+          </NativeMenu>
+        </TrayIcon.Menu>
+      </TrayIcon>
+    </TrayIcons>
+  </TrayIcon.Icons>
 </Application>

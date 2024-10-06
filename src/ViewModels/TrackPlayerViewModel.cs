@@ -126,6 +126,7 @@ public class TrackPlayerViewModel : ViewModelBase
     public TrackPlayerViewModel(LibVLC libVLC)
     {
         LibVLC = libVLC; 
+        AppState.TrackPlayer = this;
     }
     
     public void PauseOrPlaySong() 

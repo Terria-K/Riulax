@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using Riulax.ViewModels;
 using Riulax.Views;
 using HotAvalonia;
+using System;
 
 namespace Riulax;
 
@@ -35,5 +36,25 @@ public partial class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    public void Play(object? sender, EventArgs args) 
+    {
+        AppState.TrackPlayer.PauseOrPlaySong();
+    }
+
+    public void Next(object? sender, EventArgs args) 
+    {
+        if (AppState.TrackPlayer.PlayerState == TrackPlayerViewModel.PlayerShufflingState.Shuffle) 
+        {
+            AppState.TrackPlayer.RandomSong();
+            return;
+        }
+        AppState.TrackPlayer.NextSong();
+    }
+
+    public void Prev(object? sender, EventArgs args) 
+    {
+        AppState.TrackPlayer.PrevSong();
     }
 }
