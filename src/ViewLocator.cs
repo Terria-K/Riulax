@@ -18,7 +18,7 @@ public class AppViewLocator : ReactiveUI.IViewLocator
             {
                 MainWindowViewModel.Route.Home => new SongListView() { DataContext = model },
                 MainWindowViewModel.Route.Songs => new SongListView() { DataContext = model },
-                MainWindowViewModel.Route.Playlist => new SongListView() { DataContext = model },
+                MainWindowViewModel.Route.Playlist => new PlaylistListView() { DataContext = model },
                 _ => null
             };
         }

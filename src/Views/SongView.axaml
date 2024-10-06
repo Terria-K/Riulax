@@ -11,19 +11,22 @@
              mc:Ignorable="d">
     
 
-    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Spacing="4">
-        <Border Width="48" Height="48" CornerRadius="10" ClipToBounds="True">
-            <Panel Background="#7FFF22DD">
-                <Image asyncImageLoader:ImageLoader.Source="{Binding ArtworkURL}" Width="48" Stretch="Uniform"/>
+    <Panel HorizontalAlignment="Stretch">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+            <Border Width="48" Height="48" CornerRadius="10" ClipToBounds="True">
+                <Panel Background="#7FFF22DD">
+                    <Image asyncImageLoader:ImageLoader.Source="{Binding ArtworkURL}" Width="48" Stretch="Uniform"/>
 
-                <Panel Height="48" IsVisible="{Binding ArtworkURL, Converter={x:Static StringConverters.IsNullOrEmpty}}">
-                    <PathIcon Height="20" Width="20" Data="{StaticResource music_regular}"/>
+                    <Panel Height="48" IsVisible="{Binding ArtworkURL, Converter={x:Static StringConverters.IsNullOrEmpty}}">
+                        <PathIcon Height="20" Width="20" Data="{StaticResource music_regular}"/>
+                    </Panel>
                 </Panel>
-            </Panel>
-        </Border>
-        <StackPanel>
-            <TextBlock FontSize="20" Grid.Column="1" Text="{Binding Title}" HorizontalAlignment="Left" VerticalAlignment="Center"/> 
-            <TextBlock TextElement.Foreground="LightGray" FontSize="16" Grid.Column="1" Text="{Binding Artist}" HorizontalAlignment="Left" VerticalAlignment="Center"/> 
+            </Border>
+            <StackPanel>
+                <TextBlock FontSize="20" Grid.Column="1" Text="{Binding Title}" HorizontalAlignment="Left" VerticalAlignment="Center"/> 
+                <TextBlock TextElement.Foreground="LightGray" FontSize="16" Grid.Column="1" Text="{Binding Artist}" HorizontalAlignment="Left" VerticalAlignment="Center"/> 
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+        <Button Click="OnAddClicked" HorizontalAlignment="Right" i:Attached.Icon="mdi-playlist-plus" Background="Transparent" FontSize="24"/>
+    </Panel>
 </UserControl>

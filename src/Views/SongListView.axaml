@@ -4,6 +4,7 @@
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:vm="using:Riulax.ViewModels"
+            xmlns:views="using:Riulax.Views"
             xmlns:i="https://github.com/projektanker/icons.avalonia"
             x:DataType="vm:MainWindowViewModel"
             d:DesignHeight="450"
@@ -16,7 +17,13 @@
             <ListBox 
                 SelectionChanged="PlaySong"
                 SelectionMode="Single" ItemsSource="{Binding Songs}" 
-                Background="Transparent" Margin="0 20" HorizontalAlignment="Stretch"/>
+                Background="Transparent" Margin="0 20" HorizontalAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <views:SongView AddPlaylist="OpenAddToPlaylist"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Panel>
     </Border>
 

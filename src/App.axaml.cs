@@ -18,6 +18,7 @@ public partial class App : Application
         ViewLocator.Register<AlbumViewModel, AlbumView>();
         ViewLocator.Register<SongViewModel, SongView>();
         ViewLocator.Register<MusicFolderViewModel, MusicFolderView>();
+        ViewLocator.Register<PlaylistViewModel, PlaylistView>();
     }
 
     public override void OnFrameworkInitializationCompleted()

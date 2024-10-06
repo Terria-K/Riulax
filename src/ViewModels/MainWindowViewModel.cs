@@ -8,6 +8,8 @@ using Riulax.Models;
 using LibVLCSharp.Shared;
 using ReactiveUI;
 using DynamicData;
+using AvaloniaDialogs.Views;
+using Riulax.Views;
 
 namespace Riulax.ViewModels;
 
@@ -27,8 +29,10 @@ public partial class MainWindowViewModel : ViewModelBase, IScreen, IRoutableView
         }
     }
     public ICommand MyMusicCommand { get; }
+    public ICommand CreatePlaylistCommand { get; }
     public Interaction<MusicImporterViewModel, ICollection<MusicFolderViewModel>?> ShowDialog { get; }
     public ObservableCollection<SongViewModel> Songs { get; }
+    public ObservableCollection<PlaylistViewModel> Playlists { get; }
     public TrackPlayerViewModel TrackPlayerViewModel 
     {
         get => trackPlayerViewModel;
@@ -56,6 +60,7 @@ public partial class MainWindowViewModel : ViewModelBase, IScreen, IRoutableView
         trackPlayerViewModel.PrevEvent += Prev;
         trackPlayerViewModel.RandomEvent += Random;
         Songs = new ObservableCollection<SongViewModel>();
+        Playlists = new ObservableCollection<PlaylistViewModel>();
         ShowDialog = new Interaction<MusicImporterViewModel, ICollection<MusicFolderViewModel>?>();
         MyMusicCommand = ReactiveCommand.Create(() => 
         {
@@ -70,15 +75,43 @@ public partial class MainWindowViewModel : ViewModelBase, IScreen, IRoutableView
                 await Start();
             });
         });
+        CreatePlaylistCommand = ReactiveCommand.CreateFromTask(async () =>
+        {
+            CreatePlaylistView dialog = new CreatePlaylistView();
+            var str = await dialog.ShowAsync();
+            if (!str.HasValue)
+            {
+                return;
+            }
+            PlaylistViewModel playlistViewModel = new PlaylistViewModel(new Playlist(Ulid.NewUlid(), str.Value));
+            await AppState.Database.AddPlaylist(playlistViewModel);
+
+            Playlists.Add(playlistViewModel);
+        });
     }
 
     public async Task Start() 
     {
-        List<SongViewModel> songs = await AppState.Database.GetAllSong();
-        Songs.AddRange(songs);
+        var playlist = await AppState.Database.GetAllPlaylist();
+        Playlists.AddRange(playlist);
+        await ShowSongs(null);
     }
 
-    public void ChangeView(object msg) 
+    public async Task ShowSongs(string? playlist) 
+    {
+        Songs.Clear();
+
+        if (playlist is null) 
+        {
+            List<SongViewModel> songs = await AppState.Database.GetAllSong();
+            Songs.AddRange(songs);
+            return;
+        }
+        List<SongViewModel> songsWithPlaylist = await AppState.Database.GetAllSongFromPlaylistName(playlist);
+        Songs.AddRange(songsWithPlaylist);
+    }
+
+    public async void ChangeView(object msg) 
     {
         if (msg is "Playlist") 
         {
@@ -88,6 +121,7 @@ public partial class MainWindowViewModel : ViewModelBase, IScreen, IRoutableView
         }
         if (msg is "Songs") 
         {
+            await ShowSongs(null);
             ViewRoute = Route.Songs;
             Router.Navigate.Execute(this);
         }
@@ -118,6 +152,40 @@ public partial class MainWindowViewModel : ViewModelBase, IScreen, IRoutableView
             await AppState.Database.IndexFolder(folder);
         }
         await AppState.Database.EndAddSongConnection(connection);
+    }
+
+    public async Task SelectPlaylist(PlaylistViewModel playlist) 
+    {
+        await ShowSongs(playlist.Name);
+        ViewRoute = Route.Songs;
+        Router.Navigate.Execute(this);
+    }
+
+    public async Task AddToPlaylistDialog(SongViewModel model) 
+    {
+        var found = new List<PlaylistViewModel>();
+        var names = await AppState.Database.GetAllPlaylistNames(model);
+        foreach (var view in Playlists) 
+        {
+            if (names.Contains(view.Name)) 
+            {
+                found.Add(view);
+            }
+        }
+        AddToPlaylistView dialog = new AddToPlaylistView();
+        dialog.DataContext = this;
+        foreach (var f in found) 
+        {
+            if (dialog.Playlist.SelectedItems != null) 
+            {
+                dialog.Playlist.SelectedItems.Add(f);
+            }
+        }
+        var list = await dialog.ShowAsync();
+        if (list.HasValue) 
+        {
+            await AppState.Database.AddOrRemoveSongToPlaylists(model, list.Value.Item1, list.Value.Item2);
+        }
     }
 
     public void PlaySong(SongViewModel song) 

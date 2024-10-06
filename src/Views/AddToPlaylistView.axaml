@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="using:Riulax"
+             xmlns:vm="using:Riulax.ViewModels"
+             mc:Ignorable="d"
+             x:DataType="vm:MainWindowViewModel"
+             x:Class="Riulax.Views.AddToPlaylistView">
+
+	<StackPanel Orientation="Vertical" Margin="10" Spacing="4">
+        <TextBlock Text="Select a playlist to add the song"/>
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="16">
+            <Panel MinWidth="300" MaxHeight="400">
+                <ListBox x:Name="Playlist" SelectionChanged="Playlist_SelectionChanged" SelectionMode="Multiple,Toggle" ItemsSource="{Binding Playlists}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Panel>
+                                <TextBlock Text="{Binding Name}"/>
+                            </Panel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ListBox>
+            </Panel>
+        </StackPanel>
+
+        <Button Click="Clicked_Close">Save</Button>
+	</StackPanel>
+
+</UserControl>

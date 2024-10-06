@@ -12,7 +12,7 @@ public class Database
     private const string MigrationNum = "1";
     private const string MusicFolder = "music_folder" + MigrationNum;
     private const string PlaylistSongs = "playlist_songs" + MigrationNum;
-    private const string Playlist= "playlist" + MigrationNum;
+    private const string Playlist = "playlist" + MigrationNum;
     private const string Song = "song" + MigrationNum;
     public string DBSource { get; }
     public Database(string dbPath) 
@@ -59,12 +59,9 @@ public class Database
 
             command.CommandText = 
             $"""
-            CREATE TABLE if not {PlaylistSongs} (
+            CREATE TABLE if not exists {Playlist} (
                 id          TEXT NOT NULL PRIMARY KEY, 
-                playlist_id TEXT NOT NULL,
-                song_id     TEXT NOT NULL,
-                FOREIGN KEY (playlist_id) REFERENCES {Playlist} (id)
-                FOREIGN KEY (song_id) REFERENCES {Song} (id)
+                name        TEXT NOT NULL
             );
             """;
 
@@ -74,9 +71,13 @@ public class Database
 
             command.CommandText = 
             $"""
-            CREATE TABLE if not {Playlist} (
+            CREATE TABLE if not exists {PlaylistSongs} (
                 id          TEXT NOT NULL PRIMARY KEY, 
-                name        TEXT NOT NULL
+                playlist_id TEXT NOT NULL,
+                song_id     TEXT NOT NULL,
+                FOREIGN KEY (playlist_id) REFERENCES {Playlist} (id),
+                FOREIGN KEY (song_id) REFERENCES {Song} (id),
+                UNIQUE(playlist_id, song_id)
             );
             """;
 
@@ -182,6 +183,164 @@ public class Database
             }
         }
         return songs;
+    }
+
+    public async Task<List<string>> GetAllPlaylistNames(SongViewModel model) 
+    {
+        var playlistName = new List<string>();
+        using (var connection = new SqliteConnection(DBSource)) 
+        {
+            await connection.OpenAsync();
+
+            var command = connection.CreateCommand();
+            command.CommandText = $"""
+            SELECT name FROM {Playlist}
+            INNER JOIN {PlaylistSongs}
+            ON {PlaylistSongs}.playlist_id = {Playlist}.id
+
+            INNER JOIN {Song}
+            ON {PlaylistSongs}.song_id = {Song}.id
+
+            WHERE {Song}.id = $song_id
+            """;
+
+            command.Parameters.AddWithValue("$song_id", model.ID.ToString());
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (reader.Read()) 
+            {
+                playlistName.Add(reader.GetString(0));
+            }
+        }
+        return playlistName;
+    }
+
+    public async Task<List<SongViewModel>> GetAllSongFromPlaylistName(string playlistName) 
+    {
+        var songs = new List<SongViewModel>();
+        using (var connection = new SqliteConnection(DBSource)) 
+        {
+            await connection.OpenAsync();
+
+            var command = connection.CreateCommand();
+            command.CommandText = $"""
+            SELECT {Song}.* FROM {Song}
+
+            INNER JOIN {PlaylistSongs}
+            ON {Song}.id = {PlaylistSongs}.song_id
+
+            INNER JOIN {Playlist}
+            ON {PlaylistSongs}.playlist_id = {Playlist}.id
+
+            WHERE {Playlist}.name = $playlistName
+            ORDER BY title ASC
+            """;
+
+            command.Parameters.AddWithValue("$playlistName", playlistName);
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (reader.Read()) 
+            {
+                songs.Add(new SongViewModel(
+                    new Song(
+                        Ulid.Parse(reader.GetString(0)), 
+                        reader.GetString(1), 
+                        reader.GetString(2), 
+                        reader.GetString(3),
+                        reader.GetString(4),
+                        reader.GetString(5),
+                        Ulid.Parse(reader.GetString(6))
+                    )
+                ));
+            }
+        }
+        return songs;
+    }
+#endregion
+
+#region Playlist
+    public async ValueTask AddOrRemoveSongToPlaylists(SongViewModel songModel, List<PlaylistViewModel> toAdd, List<PlaylistViewModel> toRemove) 
+    {
+        using (var connection = new SqliteConnection(DBSource)) 
+        {
+            await connection.OpenAsync();
+
+            foreach (var model in toAdd) 
+            {
+                var command = connection.CreateCommand();
+                command.CommandText = $"""
+                INSERT OR IGNORE INTO {PlaylistSongs}
+                VALUES ($id, $playlist_id, $song_id)
+                """;
+
+                command.Parameters.AddWithValue("$id", Ulid.NewUlid().ToString());
+                command.Parameters.AddWithValue("$playlist_id", model.ID.ToString());
+                command.Parameters.AddWithValue("$song_id", songModel.ID.ToString());
+
+                await command.ExecuteNonQueryAsync();
+            }
+
+            foreach (var model in toRemove) 
+            {
+                var command = connection.CreateCommand();
+                command.CommandText = $"""
+                DELETE FROM {PlaylistSongs}
+                WHERE playlist_id=$playlist_id AND song_id=$song_id
+                """;
+
+                command.Parameters.AddWithValue("$playlist_id", model.ID.ToString());
+                command.Parameters.AddWithValue("$song_id", songModel.ID.ToString());
+
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+    }
+
+    public async ValueTask AddPlaylist(PlaylistViewModel viewModel) 
+    {
+        using (var connection = new SqliteConnection(DBSource)) 
+        {
+            await connection.OpenAsync();
+
+            var command = connection.CreateCommand();
+
+            command.CommandText = $"""
+            INSERT INTO {Playlist}
+            VALUES ($id, $name) 
+            """;
+
+            command.Parameters.AddWithValue("$id", viewModel.ID.ToString());
+            command.Parameters.AddWithValue("$name", viewModel.Name);
+
+            await command.ExecuteNonQueryAsync();
+        }
+    }
+
+    public async Task<List<PlaylistViewModel>> GetAllPlaylist() 
+    {
+        var playlist = new List<PlaylistViewModel>();
+        using (var connection = new SqliteConnection(DBSource)) 
+        {
+            await connection.OpenAsync();
+
+            var command = connection.CreateCommand();
+
+            command.CommandText = $"""
+            SELECT * FROM {Playlist}
+            """;
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (reader.Read()) 
+            {
+                playlist.Add(new PlaylistViewModel(
+                    new Playlist(
+                        Ulid.Parse(reader.GetString(0)), 
+                        reader.GetString(1) 
+                    )
+                ));
+            }
+        }
+        return playlist;
     }
 #endregion
 

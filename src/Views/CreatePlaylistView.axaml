@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="using:Riulax"
+             mc:Ignorable="d"
+			 Width="400"
+             x:Class="Riulax.Views.CreatePlaylistView">
+
+	<StackPanel Orientation="Vertical" Margin="2" Spacing="4">
+		<TextBlock Text="Name of the playlist" FontSize="16"/>
+        <TextBox Name="PlaylistName"/>
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="16">
+            <Button Click="Button_Create" IsEnabled="{Binding #PlaylistName.Text, Converter={x:Static core:RiulaxConverter.ValidInput}}">
+                <TextBlock Text="Create"/>
+            </Button>
+            <Button Click="Button_Cancel">
+                <TextBlock Text="Cancel"/>
+            </Button>
+        </StackPanel>
+
+	</StackPanel>
+
+</UserControl>

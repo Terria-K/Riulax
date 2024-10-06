@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.ReactiveUI;
-using Microsoft.Data.Sqlite;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.FontAwesome;
 using Projektanker.Icons.Avalonia.MaterialDesign;

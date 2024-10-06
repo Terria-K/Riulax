@@ -1,5 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dialogHostAvalonia="using:DialogHostAvalonia"
              x:Class="Riulax.App"
              xmlns:local="using:Riulax"
              RequestedThemeVariant="Dark">
@@ -12,5 +13,6 @@
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="avares://Riulax/Styles/Icons.axaml"/>
+        <dialogHostAvalonia:DialogHostStyles/>
     </Application.Styles>
 </Application>

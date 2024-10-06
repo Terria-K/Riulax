@@ -1,0 +1,34 @@
+<UserControl x:Class="Riulax.Views.PlaylistListView"
+            xmlns="https://github.com/avaloniaui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:vm="using:Riulax.ViewModels"
+            xmlns:i="https://github.com/projektanker/icons.avalonia"
+            x:DataType="vm:MainWindowViewModel"
+            d:DesignHeight="450"
+            d:DesignWidth="800"
+            x:CompileBindings="True"
+            mc:Ignorable="d">
+
+    <Border CornerRadius="20 00 0 0" ClipToBounds="True">
+        <StackPanel DockPanel.Dock="Right" Background="#111111">
+            <Button Command="{Binding CreatePlaylistCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="Transparent">
+                <Button.Styles>
+                    <Style Selector="Button:pressed">
+                        <Setter Property="RenderTransform" Value="none"/>
+                    </Style>
+                </Button.Styles>
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <i:Icon Value="mdi-playlist-plus" FontSize="24" VerticalAlignment="Center"/>
+                    <TextBlock Text="Add Playlist" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+
+            <ListBox SelectionChanged="SelectPlaylist" SelectionMode="Single" ItemsSource="{Binding Playlists}" 
+                Background="Transparent" Margin="0 20" HorizontalAlignment="Stretch"/>
+
+        </StackPanel>
+    </Border>
+
+</UserControl>

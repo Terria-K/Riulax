@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace Riulax.Views;
 
-public partial class MusicLibraryView : UserControl
+public partial class PlaylistView: UserControl 
 {
-    public MusicLibraryView()
+    public PlaylistView()
     {
         InitializeComponent();
     }

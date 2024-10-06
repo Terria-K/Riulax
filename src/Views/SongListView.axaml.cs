@@ -18,4 +18,10 @@ public partial class SongListView : ReactiveUserControl<MainWindowViewModel>
         var model = (MainWindowViewModel)ViewModel!;
         model.PlaySong((SongViewModel)args.AddedItems[0]!);
     }
+
+    public async void OpenAddToPlaylist(object? sender, SongEventArgs args)  
+    {
+        var model = (MainWindowViewModel)ViewModel!;
+        await model.AddToPlaylistDialog(args.SongViewModel);
+    }
 }
