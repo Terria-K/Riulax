@@ -342,6 +342,33 @@ public class Database
         }
         return playlist;
     }
+
+    public async ValueTask DeletePlaylist(PlaylistViewModel viewModel) 
+    {
+        using (var connection = new SqliteConnection(DBSource)) 
+        {
+            await connection.OpenAsync();
+
+            var command = connection.CreateCommand();
+            command.CommandText = $"""
+            DELETE FROM {PlaylistSongs}
+            WHERE playlist_id=$id
+            """;
+            command.Parameters.AddWithValue("$id", viewModel.ID.ToString());
+
+            await command.ExecuteNonQueryAsync();
+
+            command = connection.CreateCommand();
+            command.CommandText = $"""
+            DELETE FROM {Playlist}
+            WHERE id=$id
+            """;
+            command.Parameters.AddWithValue("$id", viewModel.ID.ToString());
+
+            await command.ExecuteNonQueryAsync();
+
+        }
+    }
 #endregion
 
 #region MusicFolder

@@ -5,6 +5,7 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:vm="using:Riulax.ViewModels"
             xmlns:i="https://github.com/projektanker/icons.avalonia"
+            xmlns:views="using:Riulax.Views"
             x:DataType="vm:MainWindowViewModel"
             d:DesignHeight="450"
             d:DesignWidth="800"
@@ -26,7 +27,13 @@
             </Button>
 
             <ListBox SelectionChanged="SelectPlaylist" SelectionMode="Single" ItemsSource="{Binding Playlists}" 
-                Background="Transparent" Margin="0 20" HorizontalAlignment="Stretch"/>
+                Background="Transparent" Margin="0 20" HorizontalAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <views:PlaylistView DeletePlaylist="DeletePlaylist"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
         </StackPanel>
     </Border>

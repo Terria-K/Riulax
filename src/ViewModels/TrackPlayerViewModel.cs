@@ -175,16 +175,19 @@ public class TrackPlayerViewModel : ViewModelBase
     public void NextSong() 
     {
         NextEvent?.Invoke();
+        PlaySong();
     }
 
     public void PrevSong() 
     {
         PrevEvent?.Invoke();
+        PlaySong();
     }
 
     public void RandomSong() 
     {
         RandomEvent?.Invoke();
+        PlaySong();
     }
 
     public void ChangeState() 

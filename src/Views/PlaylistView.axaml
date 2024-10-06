@@ -11,14 +11,19 @@
              mc:Ignorable="d">
     
 
-    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Spacing="4">
-        <Border Width="32" Height="32" CornerRadius="2" ClipToBounds="True">
-            <Panel Background="#222222">
-                <i:Icon Value="mdi-playlist-music" FontSize="32"/>
-            </Panel>
-        </Border>
-        <StackPanel VerticalAlignment="Center">
-            <TextBlock FontSize="16" Grid.Column="1" Text="{Binding Name}" HorizontalAlignment="Left"/> 
+    <Panel HorizontalAlignment="Stretch">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+            <Border Width="32" Height="32" CornerRadius="2" ClipToBounds="True">
+                <Panel Background="#222222">
+                    <i:Icon Value="mdi-playlist-music" FontSize="32"/>
+                </Panel>
+            </Border>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock FontSize="16" Grid.Column="1" Text="{Binding Name}" HorizontalAlignment="Left"/> 
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+
+        <Button Click="OnDelete" i:Attached.Icon="mdi-delete" HorizontalAlignment="Right" FontSize="20"/>
+
+    </Panel>
 </UserControl>

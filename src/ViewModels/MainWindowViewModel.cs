@@ -72,6 +72,7 @@ public partial class MainWindowViewModel : ViewModelBase, IScreen, IRoutableView
                 }
                 Songs.Clear();
                 await IndexLibrary(x);
+                Playlists.Clear();
                 await Start();
             });
         });
@@ -159,6 +160,12 @@ public partial class MainWindowViewModel : ViewModelBase, IScreen, IRoutableView
         await ShowSongs(playlist.Name);
         ViewRoute = Route.Songs;
         Router.Navigate.Execute(this);
+    }
+
+    public async Task DeletePlaylist(PlaylistViewModel playlist) 
+    {
+        await AppState.Database.DeletePlaylist(playlist);
+        Playlists.Remove(playlist);
     }
 
     public async Task AddToPlaylistDialog(SongViewModel model) 
