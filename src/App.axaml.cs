@@ -16,7 +16,6 @@ public partial class App : Application
         this.EnableHotReload();
         AvaloniaXamlLoader.Load(this);
 
-        ViewLocator.Register<AlbumViewModel, AlbumView>();
         ViewLocator.Register<SongViewModel, SongView>();
         ViewLocator.Register<MusicFolderViewModel, MusicFolderView>();
         ViewLocator.Register<PlaylistViewModel, PlaylistView>();
