@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.ReactiveUI;
 using Projektanker.Icons.Avalonia;
-using Projektanker.Icons.Avalonia.FontAwesome;
 using Projektanker.Icons.Avalonia.MaterialDesign;
 using Riulax.ViewModels;
 using System;
