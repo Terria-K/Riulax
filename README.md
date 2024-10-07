@@ -15,3 +15,8 @@ libvlc
 [ ] Playlist
 [ ] Albums
 [ ] Duration
+
+[ ] Flatpak publishing
+[ ] .rpm package
+[ ] .deb package
+[ ] Windows executable
