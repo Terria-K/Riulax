@@ -38,7 +38,6 @@
     <PackageReference Include="HotAvalonia.Extensions" Version="1.1.1" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.8" />
     <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.4.0" />
-    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.4.0" />
     <PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="9.4.0" />
     <PackageReference Include="LibVLCSharp" Version="3.9.0" />
     <PackageReference Include="Ulid" Version="1.3.4" />

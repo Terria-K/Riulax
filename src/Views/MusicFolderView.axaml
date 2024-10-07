@@ -16,7 +16,8 @@
             Command="{Binding DeleteFolder}"
             Grid.Column="0" 
             Grid.ColumnSpan="2" 
-            i:Attached.Icon="fa-solid fa-trash" 
+            i:Attached.Icon="mdi-delete" 
+            FontSize="20"
             HorizontalAlignment="Right" 
             VerticalAlignment="Center"/>
     </Grid>

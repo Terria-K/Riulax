@@ -23,7 +23,7 @@
             <Panel DockPanel.Dock="Top" x:Name="WindowTitle" Height="50" VerticalAlignment="Top" ZIndex="10">
                 <StackPanel VerticalAlignment="Center" Margin="10 0 10 0" Spacing="4" Orientation="Horizontal">
                     <TextBox Width="300" BorderThickness="2" Watermark="Search for songs..."/>
-                    <Button i:Attached.Icon="fa-solid fa-magnifying-glass" />
+                    <Button i:Attached.Icon="mdi-magnify" FontSize="20" />
                 </StackPanel>
 
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">

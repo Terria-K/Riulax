@@ -26,7 +26,7 @@ sealed class Program
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp() 
     {
-        IconProvider.Current.Register<FontAwesomeIconProvider>().Register<MaterialDesignIconProvider>();
+        IconProvider.Current.Register<MaterialDesignIconProvider>();
 
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
