@@ -25,8 +25,8 @@ libvlc
 + [ ] .deb package
 + [ ] Windows executable
 
-## Contributing
-# Prerequisities
+# Contributing
+## Prerequisities
 + .NET 8.0 SDK
 + vlc-devel (if Linux)
 
@@ -37,7 +37,7 @@ To build or run this application:
 
 For testing, use `dotnet watch src/Riulax.csproj` for hot reloading. (Might be buggy, but that is just how it is, be sure to manually reload for big changes)
 
-# Building a release executable
+## Building a release executable
 1. Use:
 ```bash
 $ dotnet build -c Release -r <rid>
