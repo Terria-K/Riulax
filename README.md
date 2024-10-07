@@ -12,11 +12,15 @@ libvlc
 ```
 
 ## Roadmap
-[ ] Playlist
-[ ] Albums
-[ ] Duration
++ [x] Playlist
++ [ ] Albums
++ [x] Duration
++ [ ] Home page
++ [ ] Frequently played
++ [ ] Saved session
++ [ ] Queues
 
-[ ] Flatpak publishing
-[ ] .rpm package
-[ ] .deb package
-[ ] Windows executable
++ [ ] Flatpak publishing
++ [ ] .rpm package
++ [ ] .deb package
++ [ ] Windows executable
