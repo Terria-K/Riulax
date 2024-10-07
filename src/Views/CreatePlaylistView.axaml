@@ -12,10 +12,10 @@
         <TextBox Name="PlaylistName"/>
         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="16">
             <Button Click="Button_Create" IsEnabled="{Binding #PlaylistName.Text, Converter={x:Static core:RiulaxConverter.ValidInput}}">
-                <TextBlock Text="Create"/>
+                Create
             </Button>
             <Button Click="Button_Cancel">
-                <TextBlock Text="Cancel"/>
+                Cancel
             </Button>
         </StackPanel>
 
